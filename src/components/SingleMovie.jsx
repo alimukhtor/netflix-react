@@ -126,7 +126,7 @@ class SingleMovie extends Component {
                       value="1"
                       type="radio"
                       name="rating"
-                      checked={this.state.newComment.rate === "1"}
+                      defaultChecked={this.state.newComment.rate === "1"}
                       onClick={() => this.handleRadioChange("1")}
                     />
                     <Form.Check
@@ -135,7 +135,7 @@ class SingleMovie extends Component {
                       value="2"
                       type="radio"
                       name="rating"
-                      checked={this.state.newComment.rate === "2"}
+                      defaultChecked={this.state.newComment.rate === "2"}
                       onClick={() => this.handleRadioChange("2")}
                     />
                     <Form.Check
@@ -144,7 +144,7 @@ class SingleMovie extends Component {
                       value="3"
                       type="radio"
                       name="rating"
-                      checked={this.state.newComment.rate === "3"}
+                      defaultChecked={this.state.newComment.rate === "3"}
                       onClick={() => this.handleRadioChange("3")}
                     />
                     <Form.Check
@@ -153,7 +153,7 @@ class SingleMovie extends Component {
                       value="4"
                       type="radio"
                       name="rating"
-                      checked={this.state.newComment.rate === "4"}
+                      defaultChecked={this.state.newComment.rate === "4"}
                       onClick={() => this.handleRadioChange("4")}
                     />
                     <Form.Check
@@ -162,7 +162,7 @@ class SingleMovie extends Component {
                       value="5"
                       type="radio"
                       name="rating"
-                      checked={this.state.newComment.rate === "5"}
+                      defaultChecked={this.state.newComment.rate === "5"}
                       onClick={() => this.handleRadioChange("5")}
                     />
                   </div>

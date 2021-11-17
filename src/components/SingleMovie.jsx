@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import {
   Col,
   Modal,
@@ -10,19 +10,31 @@ import {
 } from "react-bootstrap";
 import CommentsList from "./CommentsList";
 
-class SingleMovie extends Component {
-  state = {
-    selected: false,
-    comments: [],
-    error: false,
-    newComment: {
-      comment: "",
-      rate: "3",
-      elementId: this.props.data.imdbID,
-    },
-  };
+const SingleMovie =(props)=> {
+  const [selected, setSelected] = useState(false)
+  const [comments, setComments] = useState([])
+  const [error, setError] = useState(false)
+  const [selected, setSelected] = useState(false)
+  const [newComment, setNewComment] = useState({
+     comment: "",
+     rate: "3",
+     elementId: props.data.imdbID,
 
-  fetchComments = async (movieID) => {
+  })
+
+
+  // state = {
+  //   selected: false,
+  //   comments: [],
+  //   error: false,
+  //   newComment: {
+  //     comment: "",
+  //     rate: "3",
+  //     elementId: this.props.data.imdbID,
+  //   },
+  // };
+
+  const fetchComments = async (movieID) => {
     const COMMENTS_URL = "https://striveschool-api.herokuapp.com/api/comments/";
     try {
       const response = await fetch(COMMENTS_URL + movieID, {
@@ -33,24 +45,26 @@ class SingleMovie extends Component {
       });
       if (response.ok) {
         const comments = await response.json();
-        this.setState({ error: false, comments });
+        setComments(comments);
+        setError(false)
       } else {
         console.log("an error occurred");
-        this.setState({ error: true });
+        setError(true)
+
       }
     } catch (error) {
       console.log(error);
-      this.setState({ error: true });
+      setError(true)
     }
   };
 
-  submitComment = async (e) => {
+  const submitComment = async (e) => {
     e.preventDefault();
     const COMMENTS_URL = "https://striveschool-api.herokuapp.com/api/comments/";
     try {
       const response = await fetch(COMMENTS_URL, {
         method: "POST",
-        body: JSON.stringify(this.state.newComment),
+        body: JSON.stringify(newComment),
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTUwNmRlY2RhMzE2MzAwMTVkNTEyM2YiLCJpYXQiOjE2MzI2NjA5NzIsImV4cCI6MTYzMzg3MDU3Mn0.vzSXzuRnbhUs7NjBPeeIiCBg6REuTwnoXE-R7Y-zU9Y",
@@ -59,13 +73,7 @@ class SingleMovie extends Component {
       });
       if (response.ok) {
         alert("Comment added");
-        this.setState({
-          newComment: {
-            comment: "",
-            rate: 0,
-            elementId: this.props.data.imdbID,
-          },
-        });
+        setComments({comment: "", rate: 0, elementId: props.data.imdbID});
       } else {
         alert("An error has occurred");
       }
@@ -74,51 +82,50 @@ class SingleMovie extends Component {
     }
   };
 
-  handleRadioChange = (rating) => {
-    let newComment = this.state.newComment;
+  const handleRadioChange = (rating) => {
+    let newComment = newComment;
     newComment.rate = rating;
-    this.setState({ newComment });
+    setComments(newComment);
   };
 
-  handleCommentText = (e) => {
-    let newComment = this.state.newComment;
+  const handleCommentText = (e) => {
+    let newComment = newComment;
     newComment.comment = e.currentTarget.value;
-    this.setState({ newComment });
+    setComments(newComment);
   };
 
-  render() {
     return (
-      <Col className="mb-2" key={this.props.data.imdbID}>
+      <Col className="mb-2" key={props.data.imdbID}>
         <img
           className="img-fluid"
-          src={this.props.data.Poster}
+          src={props.data.Poster}
           alt="movie"
           onClick={() => {
-            this.setState({ selected: !this.state.selected });
-            this.fetchComments(this.props.data.imdbID);
+            setSelected({!selected });
+            fetchComments(props.data.imdbID);
           }}
         />
         <Modal
-          show={this.state.selected}
-          onHide={() => this.setState({ selected: !this.state.selected })}
+          show={selected}
+          onHide={() => setSelected({ !selected })}
         >
           <Modal.Header closeButton>
             <Modal.Title>Movie comments</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="my-3">
-              {this.state.error && (
+              {error && (
                 <Alert variant="danger" className="text-center">
                   Error fetching comments
                 </Alert>
               )}
-              {this.state.comments.length > 0 &&
-                this.state.comments[0].elementId === this.props.data.imdbID && (
-                  <CommentsList comments={this.state.comments} />
+              {comments.length > 0 &&
+                comments[0].elementId === props.data.imdbID && (
+                  <CommentsList comments={comments} />
                 )}
               <div className="text-center">
                 <h5 className="my-3">Add a comment</h5>
-                <Form onSubmit={this.submitComment}>
+                <Form onSubmit={submitComment}>
                   <div className="my-3 text-center">
                     <Form.Check
                       inline
@@ -126,8 +133,8 @@ class SingleMovie extends Component {
                       value="1"
                       type="radio"
                       name="rating"
-                      defaultChecked={this.state.newComment.rate === "1"}
-                      onClick={() => this.handleRadioChange("1")}
+                      defaultChecked={newComment.rate === "1"}
+                      onClick={() => handleRadioChange("1")}
                     />
                     <Form.Check
                       inline
@@ -135,8 +142,8 @@ class SingleMovie extends Component {
                       value="2"
                       type="radio"
                       name="rating"
-                      defaultChecked={this.state.newComment.rate === "2"}
-                      onClick={() => this.handleRadioChange("2")}
+                      defaultChecked={newComment.rate === "2"}
+                      onClick={() => handleRadioChange("2")}
                     />
                     <Form.Check
                       inline
@@ -144,8 +151,8 @@ class SingleMovie extends Component {
                       value="3"
                       type="radio"
                       name="rating"
-                      defaultChecked={this.state.newComment.rate === "3"}
-                      onClick={() => this.handleRadioChange("3")}
+                      defaultChecked={newComment.rate === "3"}
+                      onClick={() => handleRadioChange("3")}
                     />
                     <Form.Check
                       inline
@@ -153,8 +160,8 @@ class SingleMovie extends Component {
                       value="4"
                       type="radio"
                       name="rating"
-                      defaultChecked={this.state.newComment.rate === "4"}
-                      onClick={() => this.handleRadioChange("4")}
+                      defaultChecked={newComment.rate === "4"}
+                      onClick={() => handleRadioChange("4")}
                     />
                     <Form.Check
                       inline
@@ -162,8 +169,8 @@ class SingleMovie extends Component {
                       value="5"
                       type="radio"
                       name="rating"
-                      defaultChecked={this.state.newComment.rate === "5"}
-                      onClick={() => this.handleRadioChange("5")}
+                      defaultChecked={newComment.rate === "5"}
+                      onClick={() => handleRadioChange("5")}
                     />
                   </div>
                   <InputGroup className="mb-3">
@@ -171,8 +178,8 @@ class SingleMovie extends Component {
                       placeholder="Write your comment"
                       aria-label="comment"
                       aria-describedby="basic-addon1"
-                      onChange={this.handleCommentText}
-                      value={this.state.newComment.comment}
+                      onChange={handleCommentText}
+                      value={newComment.comment}
                       required
                     />
                   </InputGroup>
@@ -186,7 +193,6 @@ class SingleMovie extends Component {
         </Modal>
       </Col>
     );
-  }
 }
 
 export default SingleMovie;

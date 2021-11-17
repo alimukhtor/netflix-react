@@ -1,21 +1,22 @@
-import { Component } from "react";
+import { useState } from "react";
 import { Navbar, Nav, InputGroup, FormControl } from "react-bootstrap";
 
-class MyNavbar extends Component {
-  state = {
-    searchString: "",
-  };
+const MyNavbar =(props)=> {
+  const [searchString, setSearchString] = useState('')
 
-  searchStringHandler = (e) => {
+  // state = {
+  //   searchString: "",
+  // };
+
+  const searchStringHandler = (e) => {
     if (e.keyCode === 13) {
       // WHEN ENTER KEY IS PRESSED
-      this.props.showSearchResult(this.state.searchString);
+      props.showSearchResult(searchString);
     } else {
-      this.setState({ searchString: e.currentTarget.value });
+      setSearchString(e.currentTarget.value)
     }
   };
 
-  render() {
     return (
       <Navbar variant="dark" expand="lg" style={{ backgroundColor: "#221f1f" }}>
         <Navbar.Brand href="/">
@@ -50,9 +51,9 @@ class MyNavbar extends Component {
                 placeholder="Search and press enter"
                 aria-label="search"
                 aria-describedby="basic-addon1"
-                onKeyDown={this.searchStringHandler}
-                onChange={this.searchStringHandler}
-                value={this.state.searchString}
+                onKeyDown={searchStringHandler}
+                onChange={searchStringHandler}
+                value={searchString}
               />
             </InputGroup>
             <div id="kids">KIDS</div>
@@ -62,7 +63,6 @@ class MyNavbar extends Component {
         </Navbar.Collapse>
       </Navbar>
     );
-  }
 }
 
 export default MyNavbar;

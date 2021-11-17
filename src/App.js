@@ -6,7 +6,7 @@ import { Container, Alert, Dropdown } from "react-bootstrap";
 import MyNavbar from "./components/MyNavbar";
 import MyFooter from "./components/MyFooter";
 import MovieList from "./components/MovieList";
-
+adaeddwasd
 const App =()=> {
   const [gallery1, setGallery1] = useState([])
   const [gallery2, setGallery2] = useState([])

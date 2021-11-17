@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Navbar, Nav, InputGroup, FormControl } from "react-bootstrap";
+import { Link, useLocation } from 'react-router-dom'
 
 const MyNavbar =(props)=> {
+      const location = useLocation()
   const [searchString, setSearchString] = useState('')
 
   // state = {
@@ -29,19 +31,26 @@ const MyNavbar =(props)=> {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link active className="font-weight-bold" href="/">
-              Home
-            </Nav.Link>
-            <Nav.Link className="font-weight-bold" href="/">
-              TV Shows
-            </Nav.Link>
-            <Nav.Link className="font-weight-bold" href="/">
+            <Link to="/">
+              <div
+                className={
+                  "nav-link font-weight-bold" +
+                  (location.pathname === "/" ? " active" : "")
+                }
+              >
+                Home
+              </div>
+            </Link>
+            <Link to="/tv-shows">
+             <div className={'nav-link font-weight-bold' + (location.pathname === '/tv-shows' ? ' active' : '')}>TvShows</div>
+            </Link>
+            <Nav.Link className="font-weight-bold" href="">
               Movies
             </Nav.Link>
-            <Nav.Link className="font-weight-bold" href="/">
+            <Nav.Link className="font-weight-bold" href="">
               Recently Added
             </Nav.Link>
-            <Nav.Link className="font-weight-bold" href="/">
+            <Nav.Link className="font-weight-bold" href="">
               My List
             </Nav.Link>
           </Nav>

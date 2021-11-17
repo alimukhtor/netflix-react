@@ -14,7 +14,6 @@ const SingleMovie =(props)=> {
   const [selected, setSelected] = useState(false)
   const [comments, setComments] = useState([])
   const [error, setError] = useState(false)
-  const [selected, setSelected] = useState(false)
   const [newComment, setNewComment] = useState({
      comment: "",
      rate: "3",
@@ -40,7 +39,7 @@ const SingleMovie =(props)=> {
       const response = await fetch(COMMENTS_URL + movieID, {
         headers: {
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTUwNmRlY2RhMzE2MzAwMTVkNTEyM2YiLCJpYXQiOjE2MzI2NjA5NzIsImV4cCI6MTYzMzg3MDU3Mn0.vzSXzuRnbhUs7NjBPeeIiCBg6REuTwnoXE-R7Y-zU9Y",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTgyODhmZWFhY2FhMjAwMTU1MmExNjEiLCJpYXQiOjE2MzcxNTgxMzMsImV4cCI6MTYzODM2NzczM30.no23lKNtRPyGfOlfxbE60fDBobyfCit9FWBnDlNBpXM",
         },
       });
       if (response.ok) {
@@ -67,7 +66,7 @@ const SingleMovie =(props)=> {
         body: JSON.stringify(newComment),
         headers: {
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTUwNmRlY2RhMzE2MzAwMTVkNTEyM2YiLCJpYXQiOjE2MzI2NjA5NzIsImV4cCI6MTYzMzg3MDU3Mn0.vzSXzuRnbhUs7NjBPeeIiCBg6REuTwnoXE-R7Y-zU9Y",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTgyODhmZWFhY2FhMjAwMTU1MmExNjEiLCJpYXQiOjE2MzcxNTgxMzMsImV4cCI6MTYzODM2NzczM30.no23lKNtRPyGfOlfxbE60fDBobyfCit9FWBnDlNBpXM",
           "Content-Type": "application/json",
         },
       });
@@ -101,13 +100,13 @@ const SingleMovie =(props)=> {
           src={props.data.Poster}
           alt="movie"
           onClick={() => {
-            setSelected({!selected });
+            setSelected(!selected );
             fetchComments(props.data.imdbID);
           }}
         />
         <Modal
           show={selected}
-          onHide={() => setSelected({ !selected })}
+          onHide={() => setSelected( !selected )}
         >
           <Modal.Header closeButton>
             <Modal.Title>Movie comments</Modal.Title>

@@ -21,8 +21,8 @@ const App =()=> {
 
            </Routes>
          </BrowserRouter>
-       </div>
-)
+       </div> 
+     )
 }
 
 export default App;

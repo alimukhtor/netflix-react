@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navbar, Nav, InputGroup, FormControl } from "react-bootstrap";
-import { Link, useLocation } from 'react-router-dom'
+ 
 
 const MyNavbar =(props)=> {
       const location = useLocation()

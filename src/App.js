@@ -14,7 +14,7 @@ const App =()=> {
     <div className="App">
          <BrowserRouter>
          	 <Routes>
-             <Route path="/" element={<HomePage />} />
+             <Route path="/home" element={<HomePage />} />
              <Route path="/tv-shows" element={<TvShows />} />
              <Route path="*" element={<NotFound />} />
              <Route path="/movieDetails/:movieID" element={<MovieDetails />} />

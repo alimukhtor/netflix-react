@@ -3,152 +3,203 @@ import MyNavbar from "./MyNavbar";
 import MyFooter from "./MyFooter";
 import MovieList from "./MovieList";
 import { useState, useEffect} from "react";
+import { Row, Col, Navbar, Nav, FormControl, InputGroup} from "react-bootstrap";
+import { Link, useLocation } from 'react-router-dom'
 
 
 
-const HomePage =()=> {
-  const [gallery1, setGallery1] = useState([])
-  const [gallery2, setGallery2] = useState([])
-  const [gallery3, setGallery3] = useState([])
-  const [searchResults, setSearchResults] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+const HomePage =(props)=> {
+  const location = useLocation()
+const [searchString, setSearchString] = useState('')
 
+// state = {
+//   searchString: "",
+// };
 
-  const OMDB_URL = "http://www.omdbapi.com/?apikey=24ad60e9";
-  useEffect(()=> {
-    fetchMovies();
+const searchStringHandler = (e) => {
+if (e.keyCode === 13) {
+  // WHEN ENTER KEY IS PRESSED
+  props.showSearchResult(searchString);
+} else {
+  setSearchString(e.currentTarget.value)
+}
+};
 
-  }, [])
-
-
-  const fetchMovies = () => {
-    Promise.all([
-      fetch(OMDB_URL + "&s=harry%20potter")
-        .then((response) => response.json())
-        .then((responseObject) => {
-          if (responseObject.Response === "True") {
-            setGallery1(responseObject.Search);
-          } else {
-            setError(true);
-          }
-        }),
-      fetch(OMDB_URL + "&s=avengers")
-        .then((response) => response.json())
-        .then((responseObject) => {
-          if (responseObject.Response === "True") {
-            setGallery2(responseObject.Search);
-          } else {
-            setError(true);
-          }
-        }),
-      fetch(OMDB_URL + "&s=star%20wars")
-        .then((response) => response.json())
-        .then((responseObject) => {
-          if (responseObject.Response === "True") {
-            setGallery3(responseObject.Search);
-          } else {
-            setError(true);
-          }
-        }),
-    ])
-      .then(() => setLoading(false))
-      .catch((err) => {
-        setError(true);
-        console.log("An error has occurred:", err);
-      });
-  };
-
-  const showSearchResult = async (searchString) => {
-    if (searchString === "") {
-      setError(false, (searchResults: []), () => {
-        fetchMovies();
-      });
-    } else {
-      try {
-        const response = await fetch(this.OMDB_URL + "&s=" + searchString);
-        if (response.ok) {
-          const data = await response.json();
-          if (data.Response === "True") {
-            setSearchResults(data.Search);
-            setError(false);
-          } else {
-          setError(true);
-          }
-        } else {
-          setError(true);
-          console.log("an error occurred");
-        }
-      } catch (error) {
-        setError(true);
-        console.log(error);
-      }
-    }
-  };
-
-    return (
-      <div>
-        <MyNavbar showSearchResult={showSearchResult} />
-        <Container fluid className="px-4">
-          <div className="d-flex justify-content-between">
-            <div className="d-flex">
-              <h2 className="mb-4">TV Shows</h2>
-              <div className="ml-4 mt-1">
-                <Dropdown>
-                  <Dropdown.Toggle
-                    style={{ backgroundColor: "#221f1f" }}
-                    id="dropdownMenuButton"
-                    className="btn-secondary btn-sm dropdown-toggle rounded-0"
-                  >
-                    Genres
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu bg="dark">
-                    <Dropdown.Item href="#/action-1">Comedy</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Drama</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Thriller</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
-            <div>
-              <i className="fa fa-th-large icons"></i>
-              <i className="fa fa-th icons"></i>
-            </div>
+return (
+  <>
+  <Navbar variant="dark" expand="lg" style={{ backgroundColor: "#221f1f" }}>
+    <Navbar.Brand href="/">
+      <img
+        src="assets/logo.png"
+        alt="logo"
+        style={{ width: "100px", height: "55px" }}
+      />
+    </Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="mr-auto">
+        <Link to="/">
+          <div
+            className={
+              "nav-link font-weight-bold" +
+              (location.pathname === "/" ? " active" : "")
+            }
+          >
+            Home
           </div>
-          {error && (
-            <Alert variant="danger" className="text-center">
-              An error has occurred, please try again!
-            </Alert>
-          )}
-          {searchResults?.length > 0 && (
-            <MovieList
-              title="Search results"
-              movies={searchResults}
-            />
-          )}
-          {!error && !searchResults?.length > 0 && (
-            <>
-              <MovieList
-                title="Harry Potter"
-                loading={loading}
-                movies={gallery1.slice(0, 6)}
-              />
-              <MovieList
-                title="The Avengers"
-                loading={loading}
-                movies={gallery2.slice(0, 6)}
-              />
-              <MovieList
-                title="Star Wars"
-                loading={loading}
-                movies={gallery3.slice(0, 6)}
-              />
-            </>
-          )}
-          <MyFooter />
-        </Container>
-      </div>
-    );
+        </Link>
+        <Link to="/tv-shows">
+         <div className={'nav-link font-weight-bold' + (location.pathname === '/tv-shows' ? ' active' : '')}>TvShows</div>
+        </Link>
+        <Nav.Link className="font-weight-bold" href="">
+          Movies
+        </Nav.Link>
+        <Nav.Link className="font-weight-bold" href="">
+          Recently Added
+        </Nav.Link>
+        <Nav.Link className="font-weight-bold" href="">
+          My List
+        </Nav.Link>
+      </Nav>
+      <span className="d-flex align-items-center">
+        <InputGroup className="icons">
+          <FormControl
+            placeholder="Search and press enter"
+            aria-label="search"
+            aria-describedby="basic-addon1"
+            onKeyDown={searchStringHandler}
+            onChange={searchStringHandler}
+            value={searchString}
+          />
+        </InputGroup>
+        <div id="kids">KIDS</div>
+        <i className="fa fa-bell icons"></i>
+        <i className="fa fa-user icons"></i>
+      </span>
+    </Navbar.Collapse>
+  </Navbar>
+  <footer className="ali">
+    <Row className="text-center mt-5">
+      <Col xs={{ span: 6, offset: 3 }}>
+        <Row>
+          <Col xs={12} className="text-left mb-2">
+            <i className="fa fa-facebook footer-icon"></i>
+            <i className="fa fa-instagram footer-icon"></i>
+            <i className="fa fa-twitter footer-icon"></i>
+            <i className="fa fa-youtube footer-icon"></i>
+          </Col>
+        </Row>
+        <Row className="row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4">
+          <Col>
+            <Row>
+              <Col xs={12} className="footer-links">
+                <p>
+                  <a href="/" alt="footer link">
+                    Audio and Subtitles
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Media Center
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Privacy
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Contact us
+                  </a>
+                </p>
+              </Col>
+            </Row>
+          </Col>
+          <Col>
+            <Row>
+              <Col xs={12} className="footer-links">
+                <p>
+                  <a href="/" alt="footer link">
+                    Audio Description
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Investor Relations
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Legal Notices
+                  </a>
+                </p>
+              </Col>
+            </Row>
+          </Col>
+          <Col>
+            <Row>
+              <Col xs={12} className="footer-links">
+                <p>
+                  <a href="/" alt="footer link">
+                    Help Center
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Jobs
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Cookie Preferences
+                  </a>
+                </p>
+              </Col>
+            </Row>
+          </Col>
+          <Col>
+            <Row>
+              <Col xs={12} className="footer-links">
+                <p>
+                  <a href="/" alt="footer link">
+                    Gift Cards
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Terms of Use
+                  </a>
+                </p>
+                <p>
+                  <a href="/" alt="footer link">
+                    Corporate Information
+                  </a>
+                </p>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} className="text-left mb-2">
+            <button
+              type="button"
+              className="btn btn-sm footer-button rounded-0 mt-3"
+            >
+              Service Code
+            </button>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} className="text-left mb-2 mt-2 copyright">
+            © 1997-{new Date().getFullYear()} Netflix, Inc.
+          </Col>
+        </Row>
+      </Col>
+    </Row>
+  </footer>
+  </>
+);
 
 }
 export default HomePage
